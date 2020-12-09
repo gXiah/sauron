@@ -3,22 +3,14 @@
 """
 
 from __main__ import app, request, json
+from __main__ import URI_PREFIX
 
-@app.route('/', methods=['GET'])
+route = URI_PREFIX + '/'
+@app.route(route, methods=['GET'])
 def root_get():
 
-	store_id = request.args.get('store_id', default=0)
-	product_id = request.args.get('product_id', default=0)
-
-	str_response = "Undefined response"
-	status = 300
-
-	if store_id == 0 or product_id == 0:
-		str_response = ["Missing one or more parameters"]
-		status = 300
-	else:
-		str_response = [{'Response': ['Store id : {}'.format(store_id), 'Product id : {}'.format(product_id)] } ]
-		status = 200
+	str_response = "API ON"
+	status = 200
 
 
 	response = app.response_class(
