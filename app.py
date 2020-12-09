@@ -8,6 +8,9 @@ from flask import Flask, request, json
 URI_PREFIX = '/api' # The prefix to be put before each URI (eg: '/api/lookup?param=...')
 DEBUG = True
 
+DEV_DB_URI = 'postgresql://adam:fml@localhost/sauron'
+PROD_DB_URI = DEV_DB_URI # Cleed's database url (for security reasons, we are using the local uri)
+
 DEV_ENV = 'dev'
 PROD_END = 'prod'
 
@@ -15,6 +18,7 @@ ENV = DEV_ENV
 
 
 
+app = Flask(__name__)
 
 
 
@@ -23,10 +27,13 @@ ENV = DEV_ENV
 if ENV == DEV_ENV: # Local env
 	
 	DEBUG = True
+	app.config['SQLALCHEMY_DATABASE_URI'] = DEV_DB_URI
 
 elif ENV == PROD_END: # Prod env
 
 	DEBUG = False
+	app.config['SQLALCHEMY_DATABASE_URI'] = PROD_DB_URI 
+
 
 else:
 	die('Unrecognized environment (@app.py)')
@@ -34,8 +41,6 @@ else:
 #=================================
 
 
-
-app = Flask(__name__)
 
 
 
