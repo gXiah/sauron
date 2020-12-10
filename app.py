@@ -16,6 +16,14 @@ PROD_END = 'prod'
 
 ENV = DEV_ENV
 
+DEV_MIN_PATH = 'utils/extractor/pictures_urls_min.txt'
+DEV_PATH = 'utils/extractor/pictures_urls.txt'
+PROD_PATH = ''
+PIC_URLS_LIST_PATH = DEV_MIN_PATH
+
+DEV_SAVE_PATH = 'data/npz'
+PROD_SAVE_PATH = '/home/ubuntu/stylenet/embeddings/fendi.npz'
+EMBEDDINGS_SAVE_PATH = DEV_SAVE_PATH 
 
 
 app = Flask(__name__)
