@@ -49,21 +49,30 @@ def root_get():
 
 	return response
 ```
-We **STRONGLY** encourage naming the main function to be called as such ({route name}\_{route_method}()). 
+Naming the main function to be as ```{route name}\_{route_method}()``` is **STRONGLY** encouraged
 <br>
 After adding a route you should import it directly in the ```app.py``` :
 ```
 import router.routes.root_route
 ```
 
-### V1.0 - /api/lookup
-**Warning** Writing privileges to the products table are required for this route to be fully implemented (Which have not yet been granted as of V1.0, and there is no data actual data to retrieve from the distant database as a result of this fact), as such this functionnality has not be activated.
-<br>
+### /api/lookup
+
+**Note** Has not yet been implemented
+
 Access to the route, however, is possible.
+<br>
 <br>
 By calling this route and providing the ```product_id``` and ```store_id``` aparameters (/api/lookup?product_id=99&store_id=11), the API should return (for versions >=1.1) the closest matching products to looked up product, from the store's database.
 
-### V1.0 - /api/vectorize
-**Warning** The feature extraction data is stored at ```./data/npz/```, because writing privileges to the products table are required for this route to be fully implemented.
+### /api/vectorize
+
+**Note** The .npz files are saved locally for now (V1.0)
+
 <br>
-This route, as of V1.0, retrieves a first set of data from ```./utils/extractor/pictures_urls_min.txt``` (The \_min file is used for testing speed improvement, feel free to change to environement variable ```PIC_URLS_LIST_PATH``` in ```app.py``` to ```DEV_PATH``` in order to use a much larger, and thus longer to analyse, file).
+<br>
+This route, as of V1.0, retrieves a first set of data from 
+```
+./utils/extractor/pictures_urls_min.txt
+``` 
+(The \_min file is used for testing speed improvement, feel free to change to environement variable ```PIC_URLS_LIST_PATH``` in ```app.py``` to ```DEV_PATH``` in order to use a much larger, and thus longer to analyse, file).
