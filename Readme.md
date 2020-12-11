@@ -70,9 +70,9 @@ By calling this route and providing the ```product_id``` and ```store_id``` apar
 **Note** The .npz files are saved locally for now (V1.0)
 
 <br>
-<br>
-This route, as of V1.0, retrieves a first set of data from 
+This route, as of V1.0, retrieves a first set of data from
+
 ```
 ./utils/extractor/pictures_urls_min.txt
-``` 
+```
 (The \_min file is used for testing speed improvement, feel free to change to environement variable ```PIC_URLS_LIST_PATH``` in ```app.py``` to ```DEV_PATH``` in order to use a much larger, and thus longer to analyse, file).
