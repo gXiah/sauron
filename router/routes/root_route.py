@@ -6,6 +6,8 @@ from __main__ import app, request, json
 from __main__ import URI_PREFIX
 
 route = URI_PREFIX + '/'
+
+@app.route('/', methods=['GET'])
 @app.route(route, methods=['GET'])
 def root_get():
 

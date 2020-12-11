@@ -1,5 +1,7 @@
 from flask import Flask, request, json
-
+import os
+from utils.IO_ops.logger_engine.logger import Logger
+Logger = Logger()
 
 """
 	Environment variables
@@ -49,6 +51,9 @@ else:
 #=================================
 
 
+#Suppressing INFO and WARNING messages (because of Tensorflow)
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+Logger.print("Suppressing WARNING and INFO messages")
 
 
 

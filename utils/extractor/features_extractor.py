@@ -11,7 +11,6 @@ from keras.layers import Input
 
 from utils.IO_ops._txt_engine._txt_reader import get_lines
 
-
 paths_list = []
 
 m = MobileNetV2(weights="imagenet", include_top=True,input_tensor=Input(shape=(224 , 224, 3)))
