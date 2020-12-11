@@ -10,6 +10,7 @@ from keras.models import Model
 from keras.layers import Input
 
 from utils.IO_ops._txt_engine._txt_reader import get_lines
+from __main__ import Logger
 
 paths_list = []
 
@@ -36,8 +37,7 @@ def init(urls_file_path, save_path):
 
     paths_list = get_lines(urls_file_path)
 
-    print("======================")
-    print("Initializing extractor")
+    Logger.print("Initializing extractor")
     
     embeddings = []
     for file in paths_list:

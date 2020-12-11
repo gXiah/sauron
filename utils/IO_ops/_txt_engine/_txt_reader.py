@@ -13,3 +13,6 @@ def get_lines(filepath):
 	content = [l.strip() for l in lines]
 
 	return content
+
+def get_db_lines():
+	pass

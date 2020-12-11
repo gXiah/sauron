@@ -1,5 +1,8 @@
 from flask import Flask, request, json
+
 import os
+from datetime import datetime
+
 from utils.IO_ops.logger_engine.logger import Logger
 Logger = Logger()
 
@@ -23,7 +26,7 @@ DEV_PATH = 'utils/extractor/pictures_urls.txt'
 PROD_PATH = ''
 PIC_URLS_LIST_PATH = DEV_MIN_PATH
 
-DEV_SAVE_PATH = 'data/npz'
+DEV_SAVE_PATH = 'data/npz/' + datetime.now().strftime("%Y-%B-%d--%H-%M-%S")
 PROD_SAVE_PATH = '/home/ubuntu/stylenet/embeddings/fendi.npz'
 EMBEDDINGS_SAVE_PATH = DEV_SAVE_PATH 
 
