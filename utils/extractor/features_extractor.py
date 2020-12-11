@@ -63,27 +63,34 @@ def get_embedding(model, image_array):
 
 def init(urls_file_path, save_path):
 
+    # Gets a list of images URLs
     paths_list = get_lines(urls_file_path)
 
     Logger.print("Initializing extractor")
     
+    # Extracting the data from each image
     embeddings = []
     i = 0
     for file in paths_list:
 
-        print('Saving file #{} - {}'.format(i, file))
+        # Logging 
+        Logger.print('Saving file #{} - {}'.format(i, file))
 
+        # Processing the image
         try:
             image_processed = process_image(file)
         except IndexError as e:
             continue
 
+        # If the processing did not raise any error flag
         if image_process_flag == IMG_PROCESS_OK:
 
             emb = get_embedding(model, image_processed)
             #embeddings.append(emb)
 
 
+            # If this is the first execution of the loop
+            # we create a new directory for the .npz files
             try:
                 os.mkdir(save_path)
             except FileExistsError as e:
@@ -91,6 +98,8 @@ def init(urls_file_path, save_path):
             finally:
                 pass
 
+
+            # Saving the .npz files
             np_emp = np.asarray(emb)
             np.savez_compressed(save_path + '/' + str(i), embeddings = emb, file_names = file)
 
