@@ -1,4 +1,5 @@
 from flask import Flask, request, json
+from flask_sqlalchemy import SQLAlchemy
 
 import os
 from datetime import datetime
@@ -14,18 +15,20 @@ URI_PREFIX = '/api' # The prefix to be put before each URI (eg: '/api/lookup?par
 DEBUG = True
 
 DEV_DB_URI = 'postgresql://adam:fml@localhost/sauron'
-PROD_DB_URI = DEV_DB_URI # Cleed's database url (for security reasons, we are using the local uri)
+PROD_DB_URI = DEV_DB_URI # Cleed's database url (for security reasons, we are using the local url)
 
+# Environment
 DEV_ENV = 'dev'
 PROD_END = 'prod'
-
 ENV = DEV_ENV
 
+# Temporary : Pictures URLs are saved here
 DEV_MIN_PATH = 'utils/extractor/pictures_urls_min.txt'
 DEV_PATH = 'utils/extractor/pictures_urls.txt'
 PROD_PATH = ''
-PIC_URLS_LIST_PATH = DEV_MIN_PATH
+PIC_URLS_LIST_PATH = DEV_PATH
 
+#.npz save path (feature extraction @ /api/vectorize)
 DEV_SAVE_PATH = 'data/npz/' + datetime.now().strftime("%Y-%B-%d--%H-%M-%S")
 PROD_SAVE_PATH = '/home/ubuntu/stylenet/embeddings/fendi.npz'
 EMBEDDINGS_SAVE_PATH = DEV_SAVE_PATH 
@@ -49,7 +52,10 @@ elif ENV == PROD_END: # Prod env
 
 
 else:
-	die('Unrecognized environment (@app.py)')
+	die('Unrecognized environment (@ ./app.py)')
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # Suppressing SQLAlchemy warnings
+database = SQLAlchemy(app)
 
 #=================================
 
