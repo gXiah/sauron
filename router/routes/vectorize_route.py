@@ -18,6 +18,7 @@ def vectorize_get():
 
 	extractor.init(PIC_URLS_LIST_PATH, EMBEDDINGS_SAVE_PATH)
 
+
 	response = app.response_class(
 		response = json.dumps(str_response),
 		status = status, # OK

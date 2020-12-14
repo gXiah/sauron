@@ -11,7 +11,15 @@ class Logger:
 
 
 	def print(self, message, separate=False):
-		length = len(message)
+
+		try:
+			length = len(message)
+		except TypeError as e:
+			length = 20
+		finally:
+			pass
+
+			
 		separation = self.gen_separation(length)
 
 		print()

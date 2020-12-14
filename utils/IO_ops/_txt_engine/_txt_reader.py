@@ -5,6 +5,16 @@
 
 	The next step would be to ask this function to get the urls directly from the database
 """
+
+
+
+#===================================
+
+
+
+"""
+	Gets the pictures URLs from a local file
+"""
 def get_lines(filepath):
 
 	with open(filepath) as f:
@@ -13,6 +23,3 @@ def get_lines(filepath):
 	content = [l.strip() for l in lines]
 
 	return content
-
-def get_db_lines():
-	pass

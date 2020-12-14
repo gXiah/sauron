@@ -1,4 +1,6 @@
 import requests
+from requests.exceptions import MissingSchema
+
 import numpy as np
 from base64 import encodebytes
 from io import BytesIO
@@ -11,7 +13,11 @@ from keras.models import Model
 from keras.layers import Input
 
 from utils.IO_ops._txt_engine._txt_reader import get_lines
-from __main__ import Logger, os
+
+from __main__ import Logger, os, database, SAVE_LOCALLY
+
+from scribe.postgresql.models.product_feature import ProductFeature
+from scribe.postgresql.models.product import Product
 
 paths_list = []
 
@@ -25,25 +31,40 @@ IMG_PROCESS_OK = 0
 image_process_flag = IMG_PROCESS_OK
 
 def process_image(image_url):
-    response = requests.get(image_url)
-    image_bytes = BytesIO(response.content)
-    preprocess = 0
     
+
+    preprocess = 0
+
+
     try:
-        img = Image.open(image_bytes)
-        img = img.resize((224, 224))
-        image_data = np.asarray(img)
-        image_data = np.expand_dims(image_data, axis=0)
-        preprocess = preprocess_input(image_data)
+        response = requests.get(image_url)
+        
+        image_bytes = BytesIO(response.content)
+        
+        
+        try:
+            img = Image.open(image_bytes)
+            img = img.resize((224, 224))
+            image_data = np.asarray(img)
+            image_data = np.expand_dims(image_data, axis=0)
+            preprocess = preprocess_input(image_data)
 
-        image_process_flag = IMG_PROCESS_OK
+            image_process_flag = IMG_PROCESS_OK
 
-    except UnidentifiedImageError as e:
+        except UnidentifiedImageError as e:
+            image_process_flag = IMG_PROCESS_ERROR
+
+
+        finally:
+            pass
+
+    except MissingSchema as e:
+        Logger.print('Features extractor : [ERROR] {} is not a valid URL'.format(image_url))
         image_process_flag = IMG_PROCESS_ERROR
-
 
     finally:
         pass
+    
 
     
     #preprocess = preprocess/255.
@@ -64,7 +85,12 @@ def get_embedding(model, image_array):
 def init(urls_file_path, save_path):
 
     # Gets a list of images URLs
-    paths_list = get_lines(urls_file_path)
+    #paths_list = get_lines(urls_file_path)
+    #paths_list = get_db_lines(database.session, product_feature.ProductFeature)
+    paths_list = Product.get_all_min(Product)
+
+
+    Logger.print(paths_list)
 
     Logger.print("Initializing extractor")
     
@@ -73,16 +99,17 @@ def init(urls_file_path, save_path):
     i = 0
     for file in paths_list:
 
-        # Logging 
-        Logger.print('Saving file #{} - {}'.format(i, file))
-
-        # Processing the image
+        # Processing the image ('file')
+        # If the processing returns and IndexError exception, we skip the current image
+        # IMPORTANT : The IndexError excpetion need to be addressed.
         try:
-            image_processed = process_image(file)
+            image_processed = process_image(file.picture_url)
         except IndexError as e:
             continue
 
+
         # If the processing did not raise any error flag
+        # (processing of the current image : 'file.picture_url', that is)
         if image_process_flag == IMG_PROCESS_OK:
 
             emb = get_embedding(model, image_processed)
@@ -98,9 +125,20 @@ def init(urls_file_path, save_path):
             finally:
                 pass
 
+            if SAVE_LOCALLY:
+                # Logging 
+                print('Saving file #{} - {}'.format(i, file.picture_url))
 
-            # Saving the .npz files
-            np_emp = np.asarray(emb)
-            np.savez_compressed(save_path + '/' + str(i), embeddings = emb, file_names = file)
+                # Saving the .npz files locally
+                np_emp = np.asarray(emb)
+                np.savez_compressed(save_path + '/' + str(i), embeddings = emb, file_names = file.picture_url)
 
+            # Stagging to database ...
+            prod_feature = ProductFeature(file.product_id, file.store_id, file.picture_url, emb)
+            database.session.add(prod_feature)
+
+
+        # ... Commit to database
+        database.session.commit()
+        
         i += 1

@@ -28,11 +28,15 @@ DEV_PATH = 'utils/extractor/pictures_urls.txt'
 PROD_PATH = ''
 PIC_URLS_LIST_PATH = DEV_PATH
 
-#.npz save path (feature extraction @ /api/vectorize)
+# .npz save path (feature extraction @ /api/vectorize)
 DEV_SAVE_PATH = 'data/npz/' + datetime.now().strftime("%Y-%B-%d--%H-%M-%S")
 PROD_SAVE_PATH = '/home/ubuntu/stylenet/embeddings/fendi.npz'
 EMBEDDINGS_SAVE_PATH = DEV_SAVE_PATH 
 
+# Enabeling / Disabeling local saving of the .npz
+DEV_SAVE_LOCALLY = True
+PROD_SAVE_LOCALLY = False
+SAVE_LOCALLY = PROD_SAVE_LOCALLY
 
 app = Flask(__name__)
 
@@ -75,7 +79,13 @@ import router.routes.vectorize_route
 #=================================
 
 
+"""
+	Importing models
+"""
+import scribe.postgresql.models.product_feature # product_feature table
+import scribe.postgresql.models.product # products table (sized down version)
 
+database.create_all()
 
 """
 	Starting up the server

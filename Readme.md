@@ -56,23 +56,20 @@ After adding a route you should import it directly in the ```app.py``` :
 import router.routes.root_route
 ```
 
-### /api/lookup
+### Search for matching pictures
+```
+/api/lookup?product_id&store_id
+```
 
 **Note** Has not yet been implemented
 
 Access to the route, however, is possible.
 <br>
-<br>
-By calling this route and providing the ```product_id``` and ```store_id``` aparameters (/api/lookup?product_id=99&store_id=11), the API should return (for versions >=1.1) the closest matching products to looked up product, from the store's database.
+By calling this route and providing the ```product_id``` and ```store_id``` GET parameters, the API should return the closest matching products to the looked up product, from the store's database.
 
-### /api/vectorize
-
-**Note** The .npz files are saved locally for now (V1.0)
-
-<br>
-This route, as of V1.0, retrieves a first set of data from
-
+### Feature extraction
 ```
-./utils/extractor/pictures_urls_min.txt
+/api/vectorize
 ```
-(The \_min file is used for testing speed improvement, feel free to change to environement variable ```PIC_URLS_LIST_PATH``` in ```app.py``` to ```DEV_PATH``` in order to use a much larger, and thus longer to analyse, file).
+Retrieves the picture URLs from the database (table *products*) and applies a feature extraction algorithm on each picture. The results are then stored in the *product_feature* table.
+<br>
