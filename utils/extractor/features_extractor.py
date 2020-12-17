@@ -82,17 +82,11 @@ def get_embedding(model, image_array):
 
     return emb
 
-def init(urls_file_path, save_path):
-
-    # Gets a list of images URLs
-    #paths_list = get_lines(urls_file_path)
-    #paths_list = get_db_lines(database.session, product_feature.ProductFeature)
-    paths_list = Product.get_all_min(Product)
-
+def init(paths_list, save_path):
 
     Logger.print(paths_list)
 
-    Logger.print("Initializing extractor")
+    Logger.print("Initializing extractor\nDatabase contains {} products".format(len(paths_list)))
     
     # Extracting the data from each image
     embeddings = []
@@ -113,7 +107,7 @@ def init(urls_file_path, save_path):
         if image_process_flag == IMG_PROCESS_OK:
 
             emb = get_embedding(model, image_processed)
-            #embeddings.append(emb)
+            embeddings.append(emb)
 
 
             # If this is the first execution of the loop
@@ -136,9 +130,14 @@ def init(urls_file_path, save_path):
             # Stagging to database ...
             prod_feature = ProductFeature(file.product_id, file.store_id, file.picture_url, emb)
             database.session.add(prod_feature)
+            print('Saving to remote storage #{} - {}'.format(i, file.picture_url))
 
+        else:
+            printf('Error while trying to save #{} - {}'.format(i, file.picture_url))
 
         # ... Commit to database
         database.session.commit()
         
         i += 1
+
+    return embeddings

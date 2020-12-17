@@ -24,3 +24,10 @@ class ProductFeature(db.Model):
 
 	def get_all(self):
 		return self.query.all()
+
+	def get_by_ids(self, prod_id, str_id):
+		res = self.query.filter_by(product_id=prod_id, store_id=str_id).all()
+		if len(res) > 0:
+			return res[-1]
+		else:
+			return []
