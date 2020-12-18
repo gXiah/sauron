@@ -96,4 +96,4 @@ HOST = '0.0.0.0'
 PORT = 8080
 
 if __name__ == '__main__':
-	app.run(debug=DEBUG, host=HOST, port=PORT)
+	app.run(debug=True, host=HOST, port=PORT)

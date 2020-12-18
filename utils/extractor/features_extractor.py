@@ -37,26 +37,35 @@ def process_image(image_url):
 
 
     try:
+
         response = requests.get(image_url)
-        
         image_bytes = BytesIO(response.content)
         
+
+        found = True
+        if response.status_code == 404:
+            found = False
         
-        try:
-            img = Image.open(image_bytes)
-            img = img.resize((224, 224))
-            image_data = np.asarray(img)
-            image_data = np.expand_dims(image_data, axis=0)
-            preprocess = preprocess_input(image_data)
 
-            image_process_flag = IMG_PROCESS_OK
+        if found:
 
-        except UnidentifiedImageError as e:
+            try:
+                img = Image.open(image_bytes)
+                img = img.resize((224, 224))
+                image_data = np.asarray(img)
+                image_data = np.expand_dims(image_data, axis=0)
+                preprocess = preprocess_input(image_data)
+
+                image_process_flag = IMG_PROCESS_OK
+
+            except UnidentifiedImageError as e:
+                image_process_flag = IMG_PROCESS_ERROR
+
+
+            finally:
+                pass
+        else:
             image_process_flag = IMG_PROCESS_ERROR
-
-
-        finally:
-            pass
 
     except MissingSchema as e:
         Logger.print('Features extractor : [ERROR] {} is not a valid URL'.format(image_url))
@@ -84,7 +93,6 @@ def get_embedding(model, image_array):
 
 def init(paths_list, save_path):
 
-    Logger.print(paths_list)
 
     Logger.print("Initializing extractor\nDatabase contains {} products".format(len(paths_list)))
     
@@ -100,7 +108,6 @@ def init(paths_list, save_path):
             image_processed = process_image(file.picture_url)
         except IndexError as e:
             continue
-
 
         # If the processing did not raise any error flag
         # (processing of the current image : 'file.picture_url', that is)
@@ -135,8 +142,15 @@ def init(paths_list, save_path):
         else:
             printf('Error while trying to save #{} - {}'.format(i, file.picture_url))
 
-        # ... Commit to database
-        database.session.commit()
+
+
+        try:
+            # ... Commit to database
+            database.session.commit()
+        except:
+            database.session.rollback()
+
+
         
         i += 1
 
