@@ -108,12 +108,19 @@ def init(paths_list, save_path):
             image_processed = process_image(file.picture_url)
         except IndexError as e:
             continue
+        except:
+            continue
 
         # If the processing did not raise any error flag
         # (processing of the current image : 'file.picture_url', that is)
         if image_process_flag == IMG_PROCESS_OK:
 
-            emb = get_embedding(model, image_processed)
+            try:
+                emb = get_embedding(model, image_processed)
+            except:
+                continue
+
+            
             embeddings.append(emb)
 
 
