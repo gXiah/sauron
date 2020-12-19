@@ -49,7 +49,7 @@ def root_get():
 
 	return response
 ```
-Naming the main function to be as ```{route name}\_{route_method}()``` is **STRONGLY** encouraged
+Naming the main function ```{route name}_{route_method}()``` is **STRONGLY** recommended
 <br>
 After adding a route you should import it directly in the ```app.py``` :
 ```
@@ -61,10 +61,6 @@ import router.routes.root_route
 /api/lookup?product_id&store_id
 ```
 
-**Note** Has not yet been implemented
-
-Access to the route, however, is possible.
-<br>
 By calling this route and providing the ```product_id``` and ```store_id``` GET parameters, the API should return the closest matching products to the looked up product, from the store's database.
 
 ### Feature extraction
@@ -72,4 +68,3 @@ By calling this route and providing the ```product_id``` and ```store_id``` GET 
 /api/vectorize
 ```
 Retrieves the picture URLs from the database (table *products*) and applies a feature extraction algorithm on each picture. The results are then stored in the *product_feature* table.
-<br>
