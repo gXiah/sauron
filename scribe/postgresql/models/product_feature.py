@@ -22,8 +22,8 @@ class ProductFeature(db.Model):
 		self.feature_data 	= feature_data
 
 
-	def get_all(self):
-		return self.query.all()
+	def get_allby_store_id(self, str_id):
+		return self.query.filter_by(store_id=str_id).all()
 
 	def get_by_ids(self, prod_id, str_id):
 		res = self.query.filter_by(product_id=prod_id, store_id=str_id).all()

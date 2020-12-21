@@ -27,7 +27,7 @@ def lookup_get():
 
 		# Fetching requested product data (from table 'product_feature')
 
-		all_products_features = ProductFeature.get_all(ProductFeature)
+		all_products_features = ProductFeature.get_all_by_store_id(ProductFeature, store_id)
 		product_features = ProductFeature.get_by_ids(ProductFeature, product_id, store_id)
 		
 		if product_features:
