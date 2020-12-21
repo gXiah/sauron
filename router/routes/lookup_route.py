@@ -23,7 +23,7 @@ def lookup_get():
 		status = 400
 	else:
 
-		print 'Looking for product #{} @ store #{}'.format(product_id, store_id	)
+		print('Looking for product #{} @ store #{}'.format(product_id, store_id	))
 
 		# Fetching requested product data (from table 'product_feature')
 
