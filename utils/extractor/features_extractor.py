@@ -5,7 +5,6 @@ import numpy as np
 from base64 import encodebytes
 from io import BytesIO
 from PIL import Image
-from PIL import UnidentifiedImageError
 
 from keras import backend as K
 from keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
@@ -58,7 +57,7 @@ def process_image(image_url):
 
                 image_process_flag = IMG_PROCESS_OK
 
-            except UnidentifiedImageError as e:
+            except OSError as e:
                 image_process_flag = IMG_PROCESS_ERROR
 
 
