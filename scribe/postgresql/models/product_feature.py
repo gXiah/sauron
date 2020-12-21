@@ -22,7 +22,7 @@ class ProductFeature(db.Model):
 		self.feature_data 	= feature_data
 
 
-	def get_allby_store_id(self, str_id):
+	def get_all_by_store_id(self, str_id):
 		return self.query.filter_by(store_id=str_id).all()
 
 	def get_by_ids(self, prod_id, str_id):
