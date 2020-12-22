@@ -78,6 +78,7 @@ Logger.print("Suppressing WARNING and INFO messages")
 import router.routes.root_route
 import router.routes.lookup_route
 import router.routes.vectorize_route
+import router.routes.add_route
 #=================================
 
 

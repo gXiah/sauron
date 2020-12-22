@@ -15,6 +15,9 @@ class ProductFeature(db.Model):
 	picture_url = db.Column(db.Text())
 	feature_data = db.Column(db.LargeBinary())
 
+
+
+
 	def __init__(self, product_id, store_id, picture_url, feature_data):
 		self.product_id 	= product_id
 		self.store_id 		= store_id
@@ -22,8 +25,14 @@ class ProductFeature(db.Model):
 		self.feature_data 	= feature_data
 
 
+
+
+
 	def get_all_by_store_id(self, str_id):
 		return self.query.filter_by(store_id=str_id).all()
+
+
+
 
 	def get_by_ids(self, prod_id, str_id):
 		res = self.query.filter_by(product_id=prod_id, store_id=str_id).all()
@@ -31,3 +40,19 @@ class ProductFeature(db.Model):
 			return res[-1]
 		else:
 			return []
+
+
+
+
+	def add_one(self):
+		
+		res = 0
+
+		try:
+			db.session.add(self)
+		except:
+			pass
+		db.session.commit()
+		
+
+		return res
