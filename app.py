@@ -15,7 +15,7 @@ URI_PREFIX = '/api' # The prefix to be put before each URI (eg: '/api/lookup?par
 DEBUG = True
 
 DEV_DB_URI = 'postgresql://adam:fml@localhost/sauron'
-PROD_DB_URI = 'postgres://selectonly:readonly@ec2-35-180-192-221.eu-west-3.compute.amazonaws.com:5432/postgres' # Cleed's database url (for security reasons, we are using the local url)
+PROD_DB_URI = '' # Cleed's database url (for security reasons, we are using the local url)
 
 # Environment
 DEV_ENV = 'dev'
