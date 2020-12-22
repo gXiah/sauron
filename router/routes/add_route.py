@@ -17,25 +17,31 @@ MISSING_PARAMS_ERROR = False
 @app.route(route, methods = ['POST'])
 def add_post():
 
-	# Fetching post data
-	request_data = request.get_json()
-
-	# These are the required keys we want from the request data
-	required_key = [
-					'store_id',
-					'product_id',
-					'picture_url',
-					'feature_data']
-
-	# Received keys
-	sent_keys = request_data.keys()
 
 	status = 200 # Return status
+	MISSING_PARAMS_ERROR = True
 
 	# Stores the product_feature object 
 	feature_object = {}
 
-	MISSING_PARAMS_ERROR = False
+	try:
+		# Fetching post data
+		request_data = request.get_json()
+
+		# These are the required keys we want from the request data
+		required_key = [
+						'store_id',
+						'product_id',
+						'picture_url',
+						'feature_data']
+
+		# Received keys
+		sent_keys = request_data.keys()
+
+	except:
+		status = 400
+		MISSING_PARAMS_ERROR = True
+
 
 	# Checking if all keys have been sent
 	for rk in required_key:
