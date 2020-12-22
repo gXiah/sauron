@@ -13,13 +13,13 @@ route = URI_PREFIX + '/vectorize'
 @app.route(route, methods=['GET'])
 def vectorize_get():
 
-	str_response = "Vectorize ..."
-	status = 200
+	str_response = "Disabled"
+	status = 500
 
 
-	paths_list = Product.get_all_min(Product)
+	#paths_list = Product.get_all_min(Product)
 	
-	extractor.init(paths_list, EMBEDDINGS_SAVE_PATH)
+	#extractor.init(paths_list, EMBEDDINGS_SAVE_PATH)
 
 
 	response = app.response_class(

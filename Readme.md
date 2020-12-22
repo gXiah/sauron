@@ -67,4 +67,25 @@ By calling this route and providing the ```product_id``` and ```store_id``` GET 
 ```
 /api/vectorize
 ```
+*Disabled for now*
+
 Retrieves the picture URLs from the database (table *products*) and applies a feature extraction algorithm on each picture. The results are then stored in the *product_feature* table.
+
+### Adding data using an external API
+```
+/api/add
+```
+
+Data can be added by sending a POST request to the api with the following body
+```
+{
+    "store_id": INT,
+    "product_id": STRING,
+    "picture_url": STRING,
+    "feature_data": [INT]
+}
+``` 
+**Note** that the feature_data has to be a *bytearray* friendly array, in other words the values should be in a way that makes it possible for *byte* conversion (ie. less that 256)
+
+This route adds, in case of *success*, the product feature object to the database.
+And it always returns, on top of the status, a JSON string response containing the status and the error, if any, that has been raised.
