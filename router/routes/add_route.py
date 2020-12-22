@@ -19,6 +19,9 @@ def add_post():
 
 
 	status = 200 # Return status
+	message = 'No message'
+
+	BYTE_ARRAY_CONV_ERROR = False
 	MISSING_PARAMS_ERROR = False
 
 	# Stores the product_feature object 
@@ -40,6 +43,7 @@ def add_post():
 
 	except:
 		print('Error while adding product - JSON Parse Error')
+		message = 'JSON Parse Error'
 		status = 400
 		MISSING_PARAMS_ERROR = True
 
@@ -52,38 +56,55 @@ def add_post():
 		else:
 			feature_object[rk] = request_data[rk]
 
+
+
+
 	if not MISSING_PARAMS_ERROR:
 
-		feature_object['feature_data'] = bytearray(feature_object['feature_data'])
-		
-		product_feature_object = ProductFeature(
-										feature_object[required_key[1]], # Prod id
-										feature_object[required_key[0]], # Store id
-										feature_object[required_key[2]], # Pic url
-										feature_object[required_key[3]]  # Feat data
-									)
 
-		res = ProductFeature.add_one(product_feature_object)
-		if res == 0:
-			print('Added product - #{} / {}'.format(
-						feature_object[required_key[0]],
-						feature_object[required_key[2]])
-			)
-		else:
-			print('Error while adding product #{} / {}'.format(
-						feature_object[required_key[0]],
-						feature_object[required_key[2]])
-			)
-			status = 500
+		try:
+			feature_object['feature_data'] = bytearray(feature_object['feature_data'])
+		except:
+			message = 'Could not convert request data to bytearray'
+			status = 400
+			BYTE_ARRAY_CONV_ERROR = True
+		
+
+
+		if BYTE_ARRAY_CONV_ERROR == False:
+
+			product_feature_object = ProductFeature(
+											feature_object[required_key[1]], # Prod id
+											feature_object[required_key[0]], # Store id
+											feature_object[required_key[2]], # Pic url
+											feature_object[required_key[3]]  # Feat data
+										)
+
+			res = ProductFeature.add_one(product_feature_object)
+			if res == 0:
+				print('Added product - #{} / {}'.format(
+							feature_object[required_key[0]],
+							feature_object[required_key[2]])
+				)
+			else:
+				print('Error while adding product #{} / {}'.format(
+							feature_object[required_key[0]],
+							feature_object[required_key[2]])
+				)
+				status = 500
+				message = 'Error while committing to database'
+
+
 
 	else:
 		status = 400
+		message = 'Missing one or more paraeters'
 
 	
 
 
 	response = app.response_class(
-		response = json.dumps('Returned with code {}'.format(status)),
+		response = json.dumps('Returned with code {} and message {}'.format(status, message)),
 		status = status, # OK
 		mimetype='application/json'
 	)
