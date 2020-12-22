@@ -19,7 +19,7 @@ def add_post():
 
 
 	status = 200 # Return status
-	MISSING_PARAMS_ERROR = True
+	MISSING_PARAMS_ERROR = False
 
 	# Stores the product_feature object 
 	feature_object = {}
