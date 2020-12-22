@@ -39,6 +39,7 @@ def add_post():
 		sent_keys = request_data.keys()
 
 	except:
+		print('Error while adding product - JSON Parse Error')
 		status = 400
 		MISSING_PARAMS_ERROR = True
 
